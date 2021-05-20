@@ -1,23 +1,25 @@
-import logo from './logo.svg';
 import './App.css';
+import React,{useState} from 'react'
+import MainPage from "./pages/MainPage"
+import ClassComponentMainPage from "./pages/ClassComponentMainPage";
 
 function App() {
+
+    const [bool,setBool] = useState(true);
+
+
+    const handleColorChange = () =>{
+        setBool(!bool);
+        console.log('color');
+    };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <div style={bool ? {backgroundColor:'red'} : {backgroundColor:'blue'}}>
+            Hello
+        </div>
+        <MainPage action={handleColorChange} title={{name: "Hello", lastName: "World"}}/>
+        {/*<ClassComponentMainPage action={handleColorChange} title={{name:"Hello", lastName:"World"}}/>*/}
     </div>
   );
 }
