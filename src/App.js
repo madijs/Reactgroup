@@ -5,20 +5,11 @@ import ClassComponentMainPage from "./pages/ClassComponentMainPage";
 
 function App() {
 
-    const [bool,setBool] = useState(true);
 
-
-    const handleColorChange = () =>{
-        setBool(!bool);
-        console.log('color');
-    };
 
   return (
     <div className="App">
-        <div style={bool ? {backgroundColor:'red'} : {backgroundColor:'blue'}}>
-            Hello
-        </div>
-        <MainPage action={handleColorChange} title={{name: "Hello", lastName: "World"}}/>
+        <MainPage/>
         {/*<ClassComponentMainPage action={handleColorChange} title={{name:"Hello", lastName:"World"}}/>*/}
     </div>
   );

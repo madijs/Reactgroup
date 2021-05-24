@@ -1,113 +1,94 @@
 import React,{useState} from 'react';
 import styles from "../assets/MainPage.module.css";
-import Text from "./Text";
-import Person from "../components/Person";
-
-//jsx
-
-// functional component
-
-const MainPage = ({title,action}) => {
-
-    // task 1
-    const [text,setText] = useState('');
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import Task from "../components/Task";
 
 
-    //task3
-    const [data,setData] = useState({
-        name: '',
-        lastName: '',
-        fatherName: '',
-    });
+const MainPage = () => {
 
-    //task 4
-    const [colors] = useState(['red','blue','yellow','pink']);
-    const [currentColor,setCurrentColor] = useState('');
+    const [state,setState] = useState([]);
+    const [currentValue,setCurrentValue] = useState('');
+    const [currentValue2,setCurrentValue2] = useState('');
+    const [trigger,setTrigger] = useState(false);
+    const [idOfUpdatedElement,setId] = useState('');
 
-    const handleChange = event => {
-        const copy = {...data};
-        copy[event.target.name] = event.target.value;
-        setData(copy);
+    //CRUD - CREATE READ UPDATE DELETE
+
+    const handleAddClicked = () => {
+        const copy = [...state];
+        copy.push({
+            id: state.length > 0 ? state[state.length-1].id+1 : 1,
+            text: currentValue
+        });
+        setState(copy);
+        setCurrentValue('');
+    };
+
+    const handleDeleteClicked = (id) => {
+        const newArr = state.filter(item => item.id !==id);
+        setState(newArr);
+    };
+
+    const handleUpdateClicked = (id) => {
+        let updateElement = '';
+        for (let i=0;i<state.length;i++){
+            if (id === state[i].id){
+                updateElement = state[i].text
+            }
+        }
+        setTrigger(true);
+        setCurrentValue(updateElement);
+        setId(id)
+    };
+
+    const update = () => {
+        const copy = [...state];
+        for (let i=0;i<state.length;i++){
+            if (idOfUpdatedElement === state[i].id){
+                copy[i].text = currentValue;
+            }
+        }
+        setState(copy);
+        setTrigger(false);
+        setCurrentValue('');
     };
 
 
-    // task 6
-    const [isShow,setShow] = useState(true);
-
-
-    //task 7
-
-    const [isDisabled,setDisabled] = useState(false);
-
-
-    //props.task1
-
-    const [person] = useState([
-        {
-            name: 'Andrey',
-            lastName: 'SON',
-            age: 20
-        },
-        {
-            name: 'Jerry',
-            lastName: 'DON',
-            age: 25
-        },
-        {
-            name: 'Tom',
-            lastName: 'QWE',
-            age: 28
-        },
-        {
-            name: 'Harry',
-            lastName: 'ASD',
-            age: 30
-        },
-        {
-            name: 'Jack',
-            lastName: 'ZXC',
-            age: 32
-        }
-        ]
-    );
-
     return(
-        <div>
-            <h1 style={{color:"red",border:'1px solid red',borderRadius:'10px'}}>TASK 1</h1>
-            <p>{text}</p>
-            <input onChange={e=>setText(e.target.value)}  type="text"/>
-            <h1>TASK 2</h1>
-            <p>{text.toUpperCase()}</p>
-
-            <h1>TASK 3</h1>
-            <p>{data.name} {data.lastName} {data.fatherName}</p>
-            <input name={"name"} onChange={e=>handleChange(e)} type="text"/>
-            <input name={"lastName"} onChange={e=>handleChange(e)} type="text"/>
-            <input name={"fatherName"} onChange={e=>handleChange(e)} type="text"/>
-
-            <h1>TASK 4</h1>
-            <p style={{backgroundColor: currentColor}}>COLORS</p>
-            <select onChange={(event)=>setCurrentColor(event.target.value)} name="" id="">
-                {colors.map((el,index)=>(
-                    <option key={index} value={el}>{el}</option>
+        <div className={styles.container}>
+            <div className={styles.add}>
+            <TextField
+                value={currentValue}
+                onChange={(e) => setCurrentValue(e.target.value)}
+                id="standard-required"
+                label="Enter your task"
+            />
+                {trigger ? (
+                    <Button
+                        onClick={update}
+                        variant="contained"
+                        color="primary">
+                        YES
+                    </Button>
+                ):(
+                    <Button
+                        onClick={handleAddClicked}
+                        variant="contained"
+                        color="primary">
+                        ADD
+                    </Button>
+                )}
+            </div>
+            <div className={styles.task_list}>
+                {state.map((el,index)=>(
+                    <Task
+                        handleUpdateClicked={handleUpdateClicked}
+                        handleDeleteClicked={handleDeleteClicked}
+                        key={index} id={el.id}
+                        text={el.text}/>
                 ))}
-            </select>
-
-            <h1>task 6</h1>
-            {isShow && (
-                <p>Im visible</p>
-            )}
-            <input checked={isShow} onChange={()=>setShow(!isShow)} type="checkbox"/>
-
-
-            <h1>TASK 7</h1>
-            <input disabled={isDisabled} type="text"/>
-            <input checked={isDisabled} onChange={()=>setDisabled(!isDisabled)} type="checkbox"/>
-
-            <h1>PROPS.TASK1</h1>
-            {person.map((el,index)=>(
-                <Person key={index} name={el.name} age={el.age} lastName={el.lastName}/>
-            ))}
+            </div>
         </div>
     )
 };

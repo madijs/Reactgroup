@@ -1,8 +1,18 @@
-.text1{
-    color: red;
-    border: 1px solid red;
-    border-radius: 30px;
+.container{
+
 }
-.text2{
-    color: blue;
+.task_list{
+    text-align: center;
+}
+.add{
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    margin-top: 200px;
+}
+.task{
+    border: 1px solid #ccc;
+    background-color: pink;
+    box-shadow:  0 0 6px 5px #cccccc;
+    padding: 50px 0;
 }
